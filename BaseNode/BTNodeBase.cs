@@ -22,6 +22,7 @@ public abstract class BTNodeBase {
     }
 
     protected BTNodeBase (BTNodeBase parentNode, BTPreCondition preCondition = null) {
+        _childNodes = new List<BTNodeBase> ();
         _parentNode = parentNode;
         _preCondition = preCondition;
         _isActiveNode = false;
@@ -46,7 +47,7 @@ public abstract class BTNodeBase {
     }
 
     public void AddChild (BTNodeBase childNode) {
-        _childNodes.Add (childNode);
+        DoAddChild(childNode);
     }
 
     public void RemoveChild (BTNodeBase childNode) {
@@ -66,13 +67,17 @@ public abstract class BTNodeBase {
     }
 
     ////////// ---> viturals below
+    
+    protected virtual void DoAddChild(BTNodeBase childNode){
+        _childNodes.Add (childNode);
+    }
 
     protected virtual bool DoCheck (BTInput input) {
         return true;
     }
 
     protected virtual BTRunningStatus DoTick (BTInput input, ref BTOutput output) {
-        Debug.LogError ("DoTick:" + _name);
+        Debug.LogError (_name);
         return BTRunningStatus.Finish;
     }
 

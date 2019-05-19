@@ -15,6 +15,8 @@
     public void Tick (BTInput input, ref BTOutput output) {
         if(_root.Check(input)){
             _root.Tick (input, ref output);
+        }else{
+            _root.Transition(input);
         }
     }
 }

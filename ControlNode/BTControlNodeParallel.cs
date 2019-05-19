@@ -19,8 +19,13 @@ public class BTControlNodeParallel : BTControlNodeBase {
         _childNodesStatus = new List<BTRunningStatus> ();
     }
 
+    protected override void DoAddChild(BTNodeBase childNode){
+        base.DoAddChild(childNode);
+        _childNodesStatus.Add(BTRunningStatus.Executing);
+    }
+
     protected override bool DoCheck (BTInput input) {
-        base.Check (input);
+        base.DoCheck (input);
         var childCount = _childNodes.Count;
         for (int i = 0; i < childCount; i++) {
             var node = _childNodes[i];
@@ -57,15 +62,13 @@ public class BTControlNodeParallel : BTControlNodeBase {
                     RestChildNodeStatus();
                     return BTRunningStatus.Finish;
                 }
-            } else if (_finishCondition == BTParallelFinishCondition.AND) {
+            } else/* if (_finishCondition == BTParallelFinishCondition.AND)*/  {
                 if(_childNodesStatus[i] == BTRunningStatus.Executing){
                     _childNodesStatus[i] = node.Tick(input, ref output);
                 }else{
                     finishChildCount++;
                 }
-            } else {
-                // Debug.LogError("BTParallelFinishCondition Error");
-            }
+            } 
         }
 
         if(finishChildCount == _childNodes.Count){
